@@ -105,10 +105,30 @@ export const SLIDES = [
     title: 'Timer',
     duration: 180, // 3 minutos em segundos
   },
-  // Adicione mais slides editando este arquivo
-  // Exemplo:
-  // {
-  //   type: 'content',
-  //   title: 'Seu título aqui',
-  // },
+  {
+    type: 'content',
+    title: 'Os pecados deles mesmo',
+    bulletPoints: [
+      'Ganância',
+      'Injustiça e opressão',
+      'Imoralidade, idolatria e folia',
+      'Ignoravam a Deus',
+      'Desonestidade',
+    ],
+  },
+  {
+    type: 'content',
+    title: 'Conclusão',
+    subtitle: 'Impacte Positivamente',
+    bulletPoints: [
+      'A mensagem de Amós permanece relevante hoje',
+      'Somos chamados à justiça e retidão',
+      'Deus valoriza a obediência acima dos rituais',
+    ],
+  },
+  {
+    type: 'content',
+    title: 'Obrigado!',
+    subtitle: 'Que Deus nos abençoe',
+  },
 ];
