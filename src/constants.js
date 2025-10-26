@@ -108,12 +108,12 @@ export const SLIDES = [
   {
     type: 'content',
     title: 'Os pecados deles mesmo',
-    bulletPoints: [
-      'Ganância',
-      'Injustiça e opressão',
-      'Imoralidade, idolatria e folia',
-      'Ignoravam a Deus',
-      'Desonestidade',
+    sinCards: [
+      { title: 'Ganância', icon: '💰' },
+      { title: 'Injustiça e opressão', icon: '⚖️' },
+      { title: 'Imoralidade, idolatria e folia', icon: '🍷' },
+      { title: 'Ignoravam a Deus', icon: '🚫' },
+      { title: 'Desonestidade', icon: '🤥' },
     ],
   },
   {

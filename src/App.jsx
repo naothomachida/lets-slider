@@ -33,8 +33,33 @@ function App() {
       }
     };
 
+    const handleClick = (event) => {
+      const clickX = event.clientX;
+      const screenWidth = window.innerWidth;
+      const clickPosition = clickX / screenWidth;
+
+      // Clique no lado esquerdo (< 50%)
+      if (clickPosition < 0.5) {
+        if (currentSlide > 0) {
+          setCurrentSlide(currentSlide - 1);
+          setSlideKey(prev => prev + 1);
+        }
+      }
+      // Clique no lado direito (>= 50%)
+      else {
+        if (currentSlide < SLIDES.length - 1) {
+          setCurrentSlide(currentSlide + 1);
+          setSlideKey(prev => prev + 1);
+        }
+      }
+    };
+
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('click', handleClick);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('click', handleClick);
+    };
   }, [currentSlide]);
 
   const slide = SLIDES[currentSlide];
@@ -56,6 +81,7 @@ function App() {
           visions={slide.visions}
           visionNote={slide.visionNote}
           phoneMockups={slide.phoneMockups}
+          sinCards={slide.sinCards}
         >
           {slide.content}
         </ContentSlide>

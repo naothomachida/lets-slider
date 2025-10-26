@@ -1,7 +1,7 @@
 import SlideLayout from './SlideLayout';
 import { IMAGES, LAYOUT, TITLE_SLIDE_DATA, ANIMATION } from '../constants';
 
-const ContentSlide = ({ title, subtitle, bulletPoints, quote, quoteSource, visions, visionNote, phoneMockups, children }) => {
+const ContentSlide = ({ title, subtitle, bulletPoints, quote, quoteSource, visions, visionNote, phoneMockups, sinCards, children }) => {
   return (
     <SlideLayout>
       {/* Logo Escola da Palavra no topo direito - SEM ANIMAÇÃO */}
@@ -383,6 +383,82 @@ const ContentSlide = ({ title, subtitle, bulletPoints, quote, quoteSource, visio
                 </div>
               )}
             </div>
+          </div>
+        )}
+
+        {/* Sin Cards - Cards de Pecados */}
+        {sinCards && sinCards.length > 0 && (
+          <div
+            style={{
+              width: '100%',
+              maxWidth: '1200px',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '30px',
+              marginTop: '20px',
+            }}
+          >
+            {sinCards.map((sin, index) => (
+              <div
+                key={index}
+                style={{
+                  position: 'relative',
+                  opacity: 0,
+                  transform: 'translateY(30px)',
+                  animation: `fadeInUp ${ANIMATION.itemDuration}ms ease-out ${(2 + index) * ANIMATION.itemDelay}ms forwards`,
+                }}
+              >
+                {/* Ícone emoji no topo */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '-30px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '70px',
+                    height: '70px',
+                    backgroundColor: '#dc2626',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '2.5rem',
+                    boxShadow: '0 4px 15px rgba(220, 38, 38, 0.5)',
+                    zIndex: 2,
+                  }}
+                >
+                  {sin.icon}
+                </div>
+
+                {/* Card */}
+                <div
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    border: '3px solid #dc2626',
+                    borderRadius: '15px',
+                    padding: '50px 25px 25px 25px',
+                    minHeight: '140px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontSize: '1.8rem',
+                      fontWeight: 'bold',
+                      margin: 0,
+                      color: '#0b035d',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {sin.title}
+                  </h3>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
