@@ -28,16 +28,30 @@ export const ANIMATION = {
   slideDistance: 30, // Distância do movimento em pixels
 };
 
-// Dados do slide de título (primeiro slide)
-export const TITLE_SLIDE_DATA = {
-  lessonNumber: 'Lição 3',
-  mainTitle: 'IMPACTE POSITIVAMENTE',
-  subtitle: 'Unidade 1 - Profetas menores',
-  teachers: 'Naotho & Suelen',
-};
+// Catálogo de aulas disponíveis
+export const LESSONS_CATALOG = [
+  {
+    id: 'interligados-licao3-4tri2025',
+    category: 'Interligados',
+    title: 'Lição 3',
+    subtitle: 'Impacte Positivamente',
+    quarter: '4º Trimestre 2025',
+    slideCount: 11,
+    titleSlideData: {
+      lessonNumber: 'Lição 3',
+      mainTitle: 'IMPACTE POSITIVAMENTE',
+      subtitle: 'Unidade 1 - Profetas menores',
+      teachers: 'Naotho & Suelen',
+    },
+  },
+];
 
-// Dados dos slides
-export const SLIDES = [
+// Dados do slide de título (primeiro slide) - mantido para compatibilidade
+export const TITLE_SLIDE_DATA = LESSONS_CATALOG[0].titleSlideData;
+
+// Dados dos slides por aula
+export const LESSONS_SLIDES = {
+  'interligados-licao3-4tri2025': [
   {
     type: 'title',
     content: '',
@@ -131,4 +145,8 @@ export const SLIDES = [
     title: 'Obrigado!',
     subtitle: 'Que Deus nos abençoe',
   },
-];
+  ],
+};
+
+// Dados dos slides - mantido para compatibilidade
+export const SLIDES = LESSONS_SLIDES['interligados-licao3-4tri2025'];

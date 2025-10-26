@@ -1,7 +1,8 @@
 import SlideLayout from './SlideLayout';
-import { IMAGES, LAYOUT, TITLE_SLIDE_DATA, ANIMATION } from '../constants';
+import { IMAGES, LAYOUT, ANIMATION } from '../constants';
 
-const TitleSlide = () => {
+const TitleSlide = ({ lessonData }) => {
+  const titleData = lessonData.titleSlideData;
   return (
     <SlideLayout>
       {/* Conteúdo central */}
@@ -47,7 +48,7 @@ const TitleSlide = () => {
             animation: `fadeInUp ${ANIMATION.itemDuration}ms ease-out ${1 * ANIMATION.itemDelay}ms forwards`,
           }}
         >
-          {TITLE_SLIDE_DATA.lessonNumber}
+          {titleData.lessonNumber}
         </div>
 
         {/* Grupo: Título + Subtítulo (mais próximos) */}
@@ -72,7 +73,7 @@ const TitleSlide = () => {
               animation: `fadeInUp ${ANIMATION.itemDuration}ms ease-out ${2 * ANIMATION.itemDelay}ms forwards`,
             }}
           >
-            {TITLE_SLIDE_DATA.mainTitle}
+            {titleData.mainTitle}
           </h1>
 
           {/* Subtítulo - Animado */}
@@ -86,7 +87,7 @@ const TitleSlide = () => {
               animation: `fadeInUp ${ANIMATION.itemDuration}ms ease-out ${3 * ANIMATION.itemDelay}ms forwards`,
             }}
           >
-            {TITLE_SLIDE_DATA.subtitle}
+            {titleData.subtitle}
           </p>
         </div>
       </div>
@@ -127,7 +128,7 @@ const TitleSlide = () => {
             flex: '1',
           }}
         >
-          {TITLE_SLIDE_DATA.teachers}
+          {titleData.teachers}
         </p>
 
         {/* Logo EDP à direita */}

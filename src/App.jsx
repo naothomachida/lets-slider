@@ -2,17 +2,25 @@ import { useState, useEffect } from 'react';
 import TitleSlide from './components/TitleSlide';
 import ContentSlide from './components/ContentSlide';
 import TimerSlide from './components/TimerSlide';
-import { SLIDES } from './constants';
+import WelcomeScreen from './components/WelcomeScreen';
+import LessonSelector from './components/LessonSelector';
+import { LESSONS_CATALOG, LESSONS_SLIDES } from './constants';
 
 function App() {
+  const [screen, setScreen] = useState('welcome'); // 'welcome', 'selector', 'presentation'
+  const [selectedLesson, setSelectedLesson] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideKey, setSlideKey] = useState(0);
 
+  const slides = selectedLesson ? LESSONS_SLIDES[selectedLesson] : [];
+
   useEffect(() => {
+    if (screen !== 'presentation') return;
+
     const handleKeyDown = (event) => {
       if (event.key === 'ArrowRight' || event.key === ' ') {
         // Próximo slide
-        if (currentSlide < SLIDES.length - 1) {
+        if (currentSlide < slides.length - 1) {
           setCurrentSlide(currentSlide + 1);
           setSlideKey(prev => prev + 1);
         }
@@ -28,7 +36,12 @@ function App() {
         setSlideKey(prev => prev + 1);
       } else if (event.key === 'End') {
         // Último slide
-        setCurrentSlide(SLIDES.length - 1);
+        setCurrentSlide(slides.length - 1);
+        setSlideKey(prev => prev + 1);
+      } else if (event.key === 'Escape') {
+        // Voltar para seletor
+        setScreen('selector');
+        setCurrentSlide(0);
         setSlideKey(prev => prev + 1);
       }
     };
@@ -36,18 +49,17 @@ function App() {
     const handleClick = (event) => {
       const clickX = event.clientX;
       const screenWidth = window.innerWidth;
-      const clickPosition = clickX / screenWidth;
 
-      // Clique no lado esquerdo (< 50%)
-      if (clickPosition < 0.5) {
+      // Clique no terço esquerdo da tela
+      if (clickX < screenWidth / 3) {
         if (currentSlide > 0) {
           setCurrentSlide(currentSlide - 1);
           setSlideKey(prev => prev + 1);
         }
       }
-      // Clique no lado direito (>= 50%)
-      else {
-        if (currentSlide < SLIDES.length - 1) {
+      // Clique no terço direito da tela
+      else if (clickX > (screenWidth * 2) / 3) {
+        if (currentSlide < slides.length - 1) {
           setCurrentSlide(currentSlide + 1);
           setSlideKey(prev => prev + 1);
         }
@@ -60,14 +72,36 @@ function App() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('click', handleClick);
     };
-  }, [currentSlide]);
+  }, [screen, currentSlide, slides.length]);
 
-  const slide = SLIDES[currentSlide];
+  const handleStartWelcome = () => {
+    setScreen('selector');
+  };
+
+  const handleSelectLesson = (lessonId) => {
+    setSelectedLesson(lessonId);
+    setCurrentSlide(0);
+    setSlideKey(prev => prev + 1);
+    setScreen('presentation');
+  };
+
+  // Tela de boas-vindas
+  if (screen === 'welcome') {
+    return <WelcomeScreen onStart={handleStartWelcome} />;
+  }
+
+  // Tela de seleção de aulas
+  if (screen === 'selector') {
+    return <LessonSelector lessons={LESSONS_CATALOG} onSelectLesson={handleSelectLesson} />;
+  }
+
+  // Tela de apresentação
+  const slide = slides[currentSlide];
 
   return (
     <>
       {slide.type === 'title' ? (
-        <TitleSlide key={slideKey} />
+        <TitleSlide key={slideKey} lessonData={LESSONS_CATALOG.find(l => l.id === selectedLesson)} />
       ) : slide.type === 'timer' ? (
         <TimerSlide key={slideKey} duration={slide.duration} />
       ) : (
@@ -81,7 +115,6 @@ function App() {
           visions={slide.visions}
           visionNote={slide.visionNote}
           phoneMockups={slide.phoneMockups}
-          sinCards={slide.sinCards}
         >
           {slide.content}
         </ContentSlide>
@@ -99,7 +132,7 @@ function App() {
           zIndex: 9999,
         }}
       >
-        {currentSlide + 1} / {SLIDES.length}
+        {currentSlide + 1} / {slides.length}
       </div>
     </>
   );
