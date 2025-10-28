@@ -94,6 +94,8 @@ const SlideLayout = ({ children, isVertical = false }) => {
   // Modo horizontal padrão (tela cheia)
   // Se precisar de escala (tela pequena), usa container escalado
   if (useScaling) {
+    const isMobile = window.innerWidth < 768 || window.innerHeight < 500;
+
     return (
       <div
         ref={containerRef}
@@ -108,7 +110,8 @@ const SlideLayout = ({ children, isVertical = false }) => {
           alignItems: 'center',
           position: 'relative',
           overflow: 'hidden',
-          padding: '10px', // Padding adicional para garantir espaço
+          // Mais padding embaixo para mobile (barra do navegador)
+          padding: isMobile ? '10px 10px 30px 10px' : '10px',
           boxSizing: 'border-box',
         }}
       >
@@ -118,7 +121,8 @@ const SlideLayout = ({ children, isVertical = false }) => {
           style={{
             width: '1920px',
             height: '1080px',
-            transform: `scale(${scale})`,
+            // Move um pouco para cima no mobile para dar mais espaço embaixo
+            transform: isMobile ? `scale(${scale}) translateY(-5%)` : `scale(${scale})`,
             transformOrigin: 'center center',
             position: 'absolute',
             display: 'flex',
