@@ -122,8 +122,8 @@ const TimerSlide = ({ duration = 480, isVertical = false }) => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          width: '100%',
-          height: '100%',
+          width: isVertical ? '1920px' : '100%',
+          height: isVertical ? '1080px' : '100%',
           gap: '50px',
         }}
       >

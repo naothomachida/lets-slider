@@ -1,10 +1,34 @@
 import { COLORS } from '../constants';
+import { useEffect, useRef, useState } from 'react';
 
 const SlideLayout = ({ children, isVertical = false }) => {
+  const containerRef = useRef(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    if (!isVertical || !containerRef.current) return;
+
+    const calculateScale = () => {
+      const containerWidth = containerRef.current.offsetWidth;
+      // Escala baseada em uma largura de referência de 1920px (tela cheia padrão)
+      const baseWidth = 1920;
+      const newScale = containerWidth / baseWidth;
+      setScale(newScale);
+    };
+
+    calculateScale();
+
+    const resizeObserver = new ResizeObserver(calculateScale);
+    resizeObserver.observe(containerRef.current);
+
+    return () => resizeObserver.disconnect();
+  }, [isVertical]);
+
   // Em modo vertical, os slides são cards com largura 100% e altura proporcional (16:9)
   if (isVertical) {
     return (
       <div
+        ref={containerRef}
         style={{
           width: '100%',
           aspectRatio: '16/9',
@@ -20,7 +44,23 @@ const SlideLayout = ({ children, isVertical = false }) => {
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
         }}
       >
-        {children}
+        {/* Container escalado para miniatura */}
+        <div
+          className="no-animations"
+          style={{
+            width: '1920px',
+            height: '1080px',
+            transform: `scale(${scale})`,
+            transformOrigin: 'center center',
+            position: 'absolute',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {children}
+        </div>
       </div>
     );
   }
