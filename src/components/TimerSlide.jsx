@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import SlideLayout from './SlideLayout';
 import { IMAGES, LAYOUT, TITLE_SLIDE_DATA, ANIMATION } from '../constants';
 
-const TimerSlide = ({ duration = 480 }) => {
+const TimerSlide = ({ duration = 480, isVertical = false }) => {
   const [timeLeft, setTimeLeft] = useState(duration);
   const [isRunning, setIsRunning] = useState(false);
   const [pulse, setPulse] = useState(false);
@@ -101,7 +101,7 @@ const TimerSlide = ({ duration = 480 }) => {
   };
 
   return (
-    <SlideLayout>
+    <SlideLayout isVertical={isVertical}>
       {/* Logo Escola da Palavra no topo direito - SEM ANIMAÇÃO */}
       <img
         src={IMAGES.logoCenter}

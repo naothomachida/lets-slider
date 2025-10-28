@@ -1,10 +1,10 @@
 import SlideLayout from './SlideLayout';
 import { IMAGES, LAYOUT, ANIMATION } from '../constants';
 
-const TitleSlide = ({ lessonData }) => {
+const TitleSlide = ({ lessonData, isVertical = false }) => {
   const titleData = lessonData.titleSlideData;
   return (
-    <SlideLayout>
+    <SlideLayout isVertical={isVertical}>
       {/* Conteúdo central */}
       <div
         style={{

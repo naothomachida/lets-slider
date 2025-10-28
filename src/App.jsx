@@ -5,17 +5,22 @@ import TimerSlide from './components/TimerSlide';
 import WelcomeScreen from './components/WelcomeScreen';
 import LessonSelector from './components/LessonSelector';
 import { LESSONS_CATALOG, LESSONS_SLIDES } from './constants';
+import { useVerticalOrientation } from './hooks/useVerticalOrientation';
 
 function App() {
   const [screen, setScreen] = useState('welcome'); // 'welcome', 'selector', 'presentation'
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideKey, setSlideKey] = useState(0);
+  const isVertical = useVerticalOrientation();
 
   const slides = selectedLesson ? LESSONS_SLIDES[selectedLesson] : [];
 
   useEffect(() => {
     if (screen !== 'presentation') return;
+
+    // Em modo vertical (cards empilhados), não precisamos de navegação por clique/teclado
+    if (isVertical) return;
 
     const handleKeyDown = (event) => {
       if (event.key === 'ArrowRight' || event.key === ' ') {
@@ -72,7 +77,7 @@ function App() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('click', handleClick);
     };
-  }, [screen, currentSlide, slides.length]);
+  }, [screen, currentSlide, slides.length, isVertical]);
 
   const handleStartWelcome = () => {
     setScreen('selector');
@@ -96,17 +101,20 @@ function App() {
   }
 
   // Tela de apresentação
-  const slide = slides[currentSlide];
+  const lessonData = LESSONS_CATALOG.find(l => l.id === selectedLesson);
 
-  return (
-    <>
-      {slide.type === 'title' ? (
-        <TitleSlide key={slideKey} lessonData={LESSONS_CATALOG.find(l => l.id === selectedLesson)} />
-      ) : slide.type === 'timer' ? (
-        <TimerSlide key={slideKey} duration={slide.duration} />
-      ) : (
+  // Renderiza um único slide
+  const renderSlide = (slide, index) => {
+    const key = isVertical ? `slide-${index}` : slideKey;
+
+    if (slide.type === 'title') {
+      return <TitleSlide key={key} lessonData={lessonData} isVertical={isVertical} />;
+    } else if (slide.type === 'timer') {
+      return <TimerSlide key={key} duration={slide.duration} isVertical={isVertical} />;
+    } else {
+      return (
         <ContentSlide
-          key={slideKey}
+          key={key}
           title={slide.title}
           subtitle={slide.subtitle}
           bulletPoints={slide.bulletPoints}
@@ -115,10 +123,50 @@ function App() {
           visions={slide.visions}
           visionNote={slide.visionNote}
           phoneMockups={slide.phoneMockups}
+          isVertical={isVertical}
         >
           {slide.content}
         </ContentSlide>
-      )}
+      );
+    }
+  };
+
+  // Modo vertical: renderiza todos os slides como cards empilhados
+  if (isVertical) {
+    return (
+      <div
+        style={{
+          width: '100%',
+          minHeight: '100vh',
+          backgroundColor: '#0b035d',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          padding: '20px 0',
+        }}
+      >
+        {slides.map((slide, index) => (
+          <div
+            key={`card-${index}`}
+            style={{
+              width: '100%',
+              marginBottom: '20px',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            {renderSlide(slide, index)}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Modo horizontal: renderiza apenas o slide atual em tela cheia
+  const slide = slides[currentSlide];
+
+  return (
+    <>
+      {renderSlide(slide, currentSlide)}
 
       {/* Indicador de slide */}
       <div
