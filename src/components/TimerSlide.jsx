@@ -410,6 +410,7 @@ const TimerSlide = ({ duration = 480, isVertical = false }) => {
 
       {/* Linha inferior: Logo ADVEC + Nomes + Logo EDP (posição fixa - SEM ANIMAÇÃO) */}
       <div
+        className="preserve-transform"
         style={{
           position: 'absolute',
           bottom: LAYOUT.bottomRowDistance,

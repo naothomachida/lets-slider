@@ -8,8 +8,12 @@ html,
 body {
   width: 100%;
   height: 100%;
-  overflow: hidden;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Desabilita overflow apenas no modo horizontal (desktop) */
+body.horizontal-mode {
+  overflow: hidden;
 }
 
 #root {
@@ -21,5 +25,9 @@ body {
 .no-animations * {
   animation: none !important;
   opacity: 1 !important;
+}
+
+/* Reseta apenas o translateY das animações, preservando outros transforms necessários */
+.no-animations *:not(.preserve-transform) {
   transform: translateY(0) !important;
 }

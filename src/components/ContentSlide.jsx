@@ -637,6 +637,7 @@ const ContentSlide = ({ title, subtitle, bulletPoints, quote, quoteSource, visio
 
       {/* Linha inferior: Logo ADVEC + Nomes + Logo EDP (posição fixa - SEM ANIMAÇÃO) */}
       <div
+        className="preserve-transform"
         style={{
           position: 'absolute',
           bottom: LAYOUT.bottomRowDistance,

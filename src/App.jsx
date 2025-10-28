@@ -17,6 +17,18 @@ function App() {
 
   const slides = selectedLesson ? LESSONS_SLIDES[selectedLesson] : [];
 
+  // Gerencia overflow do body baseado no modo
+  useEffect(() => {
+    if (!isVertical) {
+      document.body.classList.add('horizontal-mode');
+    } else {
+      document.body.classList.remove('horizontal-mode');
+    }
+    return () => {
+      document.body.classList.remove('horizontal-mode');
+    };
+  }, [isVertical]);
+
   useEffect(() => {
     if (screen !== 'presentation') return;
 
