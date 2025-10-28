@@ -5,10 +5,11 @@ import TimerSlide from './components/TimerSlide';
 import WelcomeScreen from './components/WelcomeScreen';
 import LessonSelector from './components/LessonSelector';
 import { LESSONS_CATALOG, LESSONS_SLIDES } from './constants';
-import { useVerticalOrientation } from './hooks/useVerticalOrientation';
+import { useVerticalOrientation, useSmallScreen } from './hooks/useVerticalOrientation';
 
 function App() {
   const isVertical = useVerticalOrientation();
+  const isSmallScreen = useSmallScreen();
 
   // Verifica se há uma aula na URL
   const getLessonFromUrl = () => {
@@ -23,6 +24,11 @@ function App() {
   };
 
   const lessonFromUrl = getLessonFromUrl();
+
+  // Modo de exibição: se for tela pequena em paisagem ou vertical puro, usa modo especial
+  // Vertical puro: cards empilhados
+  // Tela pequena em paisagem: modo apresentação normal (tela cheia)
+  const shouldUseCardMode = isVertical && !isSmallScreen; // Apenas telas grandes em vertical usam cards
 
   // Em modo vertical (mobile), inicia direto no seletor de aulas
   // Se houver lesson na URL, inicia direto na apresentação
@@ -50,11 +56,58 @@ function App() {
     };
   }, [isVertical]);
 
+  // Navegação por swipe (touch)
+  useEffect(() => {
+    if (screen !== 'presentation') return;
+    if (shouldUseCardMode) return; // Não usa swipe no modo de cards empilhados
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const minSwipeDistance = 50;
+
+    const handleTouchStart = (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    };
+
+    const handleTouchEnd = (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    };
+
+    const handleSwipe = () => {
+      const swipeDistance = touchStartX - touchEndX;
+
+      if (Math.abs(swipeDistance) < minSwipeDistance) return;
+
+      if (swipeDistance > 0) {
+        // Swipe left - próximo slide
+        if (currentSlide < slides.length - 1) {
+          setCurrentSlide(currentSlide + 1);
+          setSlideKey(prev => prev + 1);
+        }
+      } else {
+        // Swipe right - slide anterior
+        if (currentSlide > 0) {
+          setCurrentSlide(currentSlide - 1);
+          setSlideKey(prev => prev + 1);
+        }
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [screen, currentSlide, slides.length, shouldUseCardMode]);
+
   useEffect(() => {
     if (screen !== 'presentation') return;
 
-    // Em modo vertical (cards empilhados), não precisamos de navegação por clique/teclado
-    if (isVertical) {
+    // Em modo de cards empilhados, não precisamos de navegação por clique/teclado
+    if (shouldUseCardMode) {
       // Apenas permite ESC para voltar ao seletor
       const handleKeyDown = (event) => {
         if (event.key === 'Escape') {
@@ -129,7 +182,7 @@ function App() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('click', handleClick);
     };
-  }, [screen, currentSlide, slides.length, isVertical]);
+  }, [screen, currentSlide, slides.length, shouldUseCardMode]);
 
   const handleStartWelcome = () => {
     setScreen('selector');
@@ -161,12 +214,12 @@ function App() {
 
   // Renderiza um único slide
   const renderSlide = (slide, index) => {
-    const key = isVertical ? `slide-${index}` : slideKey;
+    const key = shouldUseCardMode ? `slide-${index}` : slideKey;
 
     if (slide.type === 'title') {
-      return <TitleSlide key={key} lessonData={lessonData} isVertical={isVertical} />;
+      return <TitleSlide key={key} lessonData={lessonData} isVertical={shouldUseCardMode} />;
     } else if (slide.type === 'timer') {
-      return <TimerSlide key={key} duration={slide.duration} isVertical={isVertical} />;
+      return <TimerSlide key={key} duration={slide.duration} isVertical={shouldUseCardMode} />;
     } else {
       return (
         <ContentSlide
@@ -179,7 +232,7 @@ function App() {
           visions={slide.visions}
           visionNote={slide.visionNote}
           phoneMockups={slide.phoneMockups}
-          isVertical={isVertical}
+          isVertical={shouldUseCardMode}
         >
           {slide.content}
         </ContentSlide>
@@ -187,8 +240,8 @@ function App() {
     }
   };
 
-  // Modo vertical: renderiza todos os slides como cards empilhados
-  if (isVertical) {
+  // Modo cards: renderiza todos os slides como cards empilhados
+  if (shouldUseCardMode) {
     return (
       <div
         style={{
@@ -263,8 +316,8 @@ function App() {
     <>
       {renderSlide(slide, currentSlide)}
 
-      {/* Indicador de slide - apenas em modo horizontal */}
-      {!isVertical && (
+      {/* Indicador de slide - não mostra no modo cards */}
+      {!shouldUseCardMode && (
         <div
           style={{
             position: 'fixed',

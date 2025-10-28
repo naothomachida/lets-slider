@@ -10,9 +10,17 @@ const SlideLayout = ({ children, isVertical = false }) => {
 
     const calculateScale = () => {
       const containerWidth = containerRef.current.offsetWidth;
-      // Escala baseada em uma largura de referência de 1920px (tela cheia padrão)
+      const containerHeight = containerRef.current.offsetHeight;
+
+      // Escala baseada em uma resolução de referência de 1920x1080
       const baseWidth = 1920;
-      const newScale = containerWidth / baseWidth;
+      const baseHeight = 1080;
+
+      // Calcula escala com base em largura e altura, usando a menor para garantir que tudo caiba
+      const scaleByWidth = containerWidth / baseWidth;
+      const scaleByHeight = containerHeight / baseHeight;
+      const newScale = Math.min(scaleByWidth, scaleByHeight);
+
       setScale(newScale);
     };
 
