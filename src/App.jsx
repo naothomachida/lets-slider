@@ -25,10 +25,15 @@ function App() {
 
   const lessonFromUrl = getLessonFromUrl();
 
-  // Modo de exibição: se for tela pequena em paisagem ou vertical puro, usa modo especial
-  // Vertical puro: cards empilhados
-  // Tela pequena em paisagem: modo apresentação normal (tela cheia)
-  const shouldUseCardMode = isVertical && !isSmallScreen; // Apenas telas grandes em vertical usam cards
+  // Modo de exibição:
+  // - Mobile vertical (em pé): cards empilhados
+  // - Mobile horizontal (deitado): apresentação normal
+  // - Desktop vertical: cards empilhados
+  // - Desktop horizontal: apresentação normal
+
+  // Se está em vertical, usa cards EXCETO se for mobile em paisagem (altura pequena)
+  const isMobileLandscape = !isVertical && window.innerHeight < 500;
+  const shouldUseCardMode = isVertical; // Qualquer tela vertical usa cards
 
   // Em modo vertical (mobile), inicia direto no seletor de aulas
   // Se houver lesson na URL, inicia direto na apresentação
