@@ -8,11 +8,12 @@ import { LESSONS_CATALOG, LESSONS_SLIDES } from './constants';
 import { useVerticalOrientation } from './hooks/useVerticalOrientation';
 
 function App() {
-  const [screen, setScreen] = useState('welcome'); // 'welcome', 'selector', 'presentation'
+  const isVertical = useVerticalOrientation();
+  // Em modo vertical (mobile), inicia direto no seletor de aulas
+  const [screen, setScreen] = useState(isVertical ? 'selector' : 'welcome'); // 'welcome', 'selector', 'presentation'
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideKey, setSlideKey] = useState(0);
-  const isVertical = useVerticalOrientation();
 
   const slides = selectedLesson ? LESSONS_SLIDES[selectedLesson] : [];
 
@@ -20,7 +21,21 @@ function App() {
     if (screen !== 'presentation') return;
 
     // Em modo vertical (cards empilhados), não precisamos de navegação por clique/teclado
-    if (isVertical) return;
+    if (isVertical) {
+      // Apenas permite ESC para voltar ao seletor
+      const handleKeyDown = (event) => {
+        if (event.key === 'Escape') {
+          setScreen('selector');
+          setCurrentSlide(0);
+          setSlideKey(prev => prev + 1);
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
 
     const handleKeyDown = (event) => {
       if (event.key === 'ArrowRight' || event.key === ' ') {
@@ -142,8 +157,45 @@ function App() {
           overflowY: 'auto',
           overflowX: 'hidden',
           padding: '20px 0',
+          position: 'relative',
         }}
       >
+        {/* Botão de voltar no topo */}
+        <div
+          style={{
+            position: 'sticky',
+            top: '10px',
+            left: '10px',
+            zIndex: 1000,
+            padding: '0 20px',
+            marginBottom: '10px',
+          }}
+        >
+          <button
+            onClick={() => {
+              setScreen('selector');
+              setCurrentSlide(0);
+              setSlideKey(prev => prev + 1);
+            }}
+            style={{
+              backgroundColor: '#76c442',
+              color: '#0b035d',
+              border: 'none',
+              borderRadius: '25px',
+              padding: '12px 24px',
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <span>←</span> Voltar
+          </button>
+        </div>
+
         {slides.map((slide, index) => (
           <div
             key={`card-${index}`}
@@ -168,20 +220,22 @@ function App() {
     <>
       {renderSlide(slide, currentSlide)}
 
-      {/* Indicador de slide */}
-      <div
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          color: 'rgba(255, 255, 255, 0.5)',
-          fontSize: '1rem',
-          fontFamily: 'monospace',
-          zIndex: 9999,
-        }}
-      >
-        {currentSlide + 1} / {slides.length}
-      </div>
+      {/* Indicador de slide - apenas em modo horizontal */}
+      {!isVertical && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            color: 'rgba(255, 255, 255, 0.5)',
+            fontSize: '1rem',
+            fontFamily: 'monospace',
+            zIndex: 9999,
+          }}
+        >
+          {currentSlide + 1} / {slides.length}
+        </div>
+      )}
     </>
   );
 }
