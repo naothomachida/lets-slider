@@ -1,9 +1,9 @@
 import SlideLayout from './SlideLayout';
 import { IMAGES, LAYOUT, TITLE_SLIDE_DATA, ANIMATION } from '../constants';
 
-const ContentSlide = ({ title, subtitle, bulletPoints, quote, quoteSource, visions, visionNote, phoneMockups, sinCards, children }) => {
+const ContentSlide = ({ title, subtitle, bulletPoints, quote, quoteSource, visions, visionNote, phoneMockups, sinCards, children, isVertical = false }) => {
   return (
-    <SlideLayout>
+    <SlideLayout isVertical={isVertical}>
       {/* Logo Escola da Palavra no topo direito - SEM ANIMAÇÃO */}
       <img
         src={IMAGES.logoCenter}
@@ -24,8 +24,8 @@ const ContentSlide = ({ title, subtitle, bulletPoints, quote, quoteSource, visio
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          width: '100%',
-          height: '100%',
+          width: isVertical ? '1920px' : '100%',
+          height: isVertical ? '1080px' : '100%',
           padding: '80px 60px 60px 60px',
           boxSizing: 'border-box',
           gap: '30px',
@@ -637,6 +637,7 @@ const ContentSlide = ({ title, subtitle, bulletPoints, quote, quoteSource, visio
 
       {/* Linha inferior: Logo ADVEC + Nomes + Logo EDP (posição fixa - SEM ANIMAÇÃO) */}
       <div
+        className="preserve-transform"
         style={{
           position: 'absolute',
           bottom: LAYOUT.bottomRowDistance,

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import SlideLayout from './SlideLayout';
 import { IMAGES, LAYOUT, TITLE_SLIDE_DATA, ANIMATION } from '../constants';
 
-const TimerSlide = ({ duration = 480 }) => {
+const TimerSlide = ({ duration = 480, isVertical = false }) => {
   const [timeLeft, setTimeLeft] = useState(duration);
   const [isRunning, setIsRunning] = useState(false);
   const [pulse, setPulse] = useState(false);
@@ -101,7 +101,7 @@ const TimerSlide = ({ duration = 480 }) => {
   };
 
   return (
-    <SlideLayout>
+    <SlideLayout isVertical={isVertical}>
       {/* Logo Escola da Palavra no topo direito - SEM ANIMAÇÃO */}
       <img
         src={IMAGES.logoCenter}
@@ -122,8 +122,8 @@ const TimerSlide = ({ duration = 480 }) => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          width: '100%',
-          height: '100%',
+          width: isVertical ? '1920px' : '100%',
+          height: isVertical ? '1080px' : '100%',
           gap: '50px',
         }}
       >
@@ -410,6 +410,7 @@ const TimerSlide = ({ duration = 480 }) => {
 
       {/* Linha inferior: Logo ADVEC + Nomes + Logo EDP (posição fixa - SEM ANIMAÇÃO) */}
       <div
+        className="preserve-transform"
         style={{
           position: 'absolute',
           bottom: LAYOUT.bottomRowDistance,

@@ -1,10 +1,10 @@
 import SlideLayout from './SlideLayout';
 import { IMAGES, LAYOUT, ANIMATION } from '../constants';
 
-const TitleSlide = ({ lessonData }) => {
+const TitleSlide = ({ lessonData, isVertical = false }) => {
   const titleData = lessonData.titleSlideData;
   return (
-    <SlideLayout>
+    <SlideLayout isVertical={isVertical}>
       {/* Conteúdo central */}
       <div
         style={{
@@ -12,8 +12,8 @@ const TitleSlide = ({ lessonData }) => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          width: '100%',
-          height: '100%',
+          width: isVertical ? '1920px' : '100%',
+          height: isVertical ? '1080px' : '100%',
           gap: '30px',
           padding: '60px',
           boxSizing: 'border-box',
@@ -94,6 +94,7 @@ const TitleSlide = ({ lessonData }) => {
 
       {/* Linha inferior: Logo ADVEC + Nomes + Logo EDP (posição fixa - SEM ANIMAÇÃO) */}
       <div
+        className="preserve-transform"
         style={{
           position: 'absolute',
           bottom: LAYOUT.bottomRowDistance,
