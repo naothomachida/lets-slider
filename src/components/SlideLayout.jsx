@@ -34,9 +34,10 @@ const SlideLayout = ({ children, isVertical = false }) => {
       const scaleByHeight = containerHeight / baseHeight;
       let newScale = Math.min(scaleByWidth, scaleByHeight);
 
-      // Reduz um pouco a escala para dar margem de segurança (especialmente para o footer)
-      // Isso garante que elementos nas bordas não sejam cortados
-      newScale = newScale * 0.95; // 5% de margem de segurança
+      // Reduz ainda mais a escala para mobile real (barra do navegador + margens)
+      // Mobile precisa de mais margem por causa das barras de navegação
+      const isMobile = window.innerWidth < 768 || window.innerHeight < 500;
+      newScale = newScale * (isMobile ? 0.88 : 0.95); // 12% margem mobile, 5% desktop
 
       setScale(newScale);
     };
@@ -107,6 +108,8 @@ const SlideLayout = ({ children, isVertical = false }) => {
           alignItems: 'center',
           position: 'relative',
           overflow: 'hidden',
+          padding: '10px', // Padding adicional para garantir espaço
+          boxSizing: 'border-box',
         }}
       >
         {/* Container escalado com fundo azul também */}

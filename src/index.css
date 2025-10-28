@@ -9,6 +9,7 @@ body {
   width: 100%;
   height: 100%;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #0b035d; /* Fundo azul em toda a página */
 }
 
 /* Desabilita overflow apenas no modo horizontal (desktop) */
@@ -19,6 +20,7 @@ body.horizontal-mode {
 #root {
   width: 100%;
   height: 100%;
+  background-color: #0b035d; /* Fundo azul também no root */
 }
 
 /* Desabilita animações no modo vertical (miniaturas) */
