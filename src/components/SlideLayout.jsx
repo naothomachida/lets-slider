@@ -32,7 +32,11 @@ const SlideLayout = ({ children, isVertical = false }) => {
       // Calcula escala com base em largura e altura, usando a menor para garantir que tudo caiba
       const scaleByWidth = containerWidth / baseWidth;
       const scaleByHeight = containerHeight / baseHeight;
-      const newScale = Math.min(scaleByWidth, scaleByHeight);
+      let newScale = Math.min(scaleByWidth, scaleByHeight);
+
+      // Reduz um pouco a escala para dar margem de segurança (especialmente para o footer)
+      // Isso garante que elementos nas bordas não sejam cortados
+      newScale = newScale * 0.95; // 5% de margem de segurança
 
       setScale(newScale);
     };
@@ -95,7 +99,7 @@ const SlideLayout = ({ children, isVertical = false }) => {
         style={{
           width: '100vw',
           height: '100vh',
-          backgroundColor: COLORS.background,
+          backgroundColor: COLORS.background, // Fundo azul no container externo
           color: COLORS.text,
           display: 'flex',
           flexDirection: 'column',
@@ -105,7 +109,7 @@ const SlideLayout = ({ children, isVertical = false }) => {
           overflow: 'hidden',
         }}
       >
-        {/* Container escalado */}
+        {/* Container escalado com fundo azul também */}
         <div
           className="no-animations"
           style={{
@@ -118,6 +122,7 @@ const SlideLayout = ({ children, isVertical = false }) => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            backgroundColor: COLORS.background, // Fundo azul no container escalado também
           }}
         >
           {children}
