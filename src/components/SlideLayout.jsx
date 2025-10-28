@@ -4,9 +4,22 @@ import { useEffect, useRef, useState } from 'react';
 const SlideLayout = ({ children, isVertical = false }) => {
   const containerRef = useRef(null);
   const [scale, setScale] = useState(1);
+  const [useScaling, setUseScaling] = useState(false);
 
   useEffect(() => {
-    if (!isVertical || !containerRef.current) return;
+    const checkIfNeedsScaling = () => {
+      // Usa escala se for modo vertical (cards) OU se for tela pequena
+      const isSmallScreen = window.innerWidth < 768 || window.innerHeight < 500;
+      setUseScaling(isVertical || isSmallScreen);
+    };
+
+    checkIfNeedsScaling();
+    window.addEventListener('resize', checkIfNeedsScaling);
+    return () => window.removeEventListener('resize', checkIfNeedsScaling);
+  }, [isVertical]);
+
+  useEffect(() => {
+    if (!useScaling || !containerRef.current) return;
 
     const calculateScale = () => {
       const containerWidth = containerRef.current.offsetWidth;
@@ -30,7 +43,7 @@ const SlideLayout = ({ children, isVertical = false }) => {
     resizeObserver.observe(containerRef.current);
 
     return () => resizeObserver.disconnect();
-  }, [isVertical]);
+  }, [useScaling]);
 
   // Em modo vertical, os slides são cards com largura 100% e altura proporcional (16:9)
   if (isVertical) {
@@ -74,6 +87,46 @@ const SlideLayout = ({ children, isVertical = false }) => {
   }
 
   // Modo horizontal padrão (tela cheia)
+  // Se precisar de escala (tela pequena), usa container escalado
+  if (useScaling) {
+    return (
+      <div
+        ref={containerRef}
+        style={{
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: COLORS.background,
+          color: COLORS.text,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Container escalado */}
+        <div
+          className="no-animations"
+          style={{
+            width: '1920px',
+            height: '1080px',
+            transform: `scale(${scale})`,
+            transformOrigin: 'center center',
+            position: 'absolute',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {children}
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop normal - sem escala
   return (
     <div
       style={{
