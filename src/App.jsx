@@ -9,9 +9,30 @@ import { useVerticalOrientation } from './hooks/useVerticalOrientation';
 
 function App() {
   const isVertical = useVerticalOrientation();
+
+  // Verifica se há uma aula na URL
+  const getLessonFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const lessonId = params.get('lesson');
+
+    // Valida se a aula existe
+    if (lessonId && LESSONS_SLIDES[lessonId]) {
+      return lessonId;
+    }
+    return null;
+  };
+
+  const lessonFromUrl = getLessonFromUrl();
+
   // Em modo vertical (mobile), inicia direto no seletor de aulas
-  const [screen, setScreen] = useState(isVertical ? 'selector' : 'welcome'); // 'welcome', 'selector', 'presentation'
-  const [selectedLesson, setSelectedLesson] = useState(null);
+  // Se houver lesson na URL, inicia direto na apresentação
+  const getInitialScreen = () => {
+    if (lessonFromUrl) return 'presentation';
+    return isVertical ? 'selector' : 'welcome';
+  };
+
+  const [screen, setScreen] = useState(getInitialScreen());
+  const [selectedLesson, setSelectedLesson] = useState(lessonFromUrl);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideKey, setSlideKey] = useState(0);
 
@@ -40,6 +61,8 @@ function App() {
           setScreen('selector');
           setCurrentSlide(0);
           setSlideKey(prev => prev + 1);
+          // Remove o parâmetro lesson da URL
+          window.history.pushState({}, '', window.location.pathname);
         }
       };
 
@@ -75,6 +98,8 @@ function App() {
         setScreen('selector');
         setCurrentSlide(0);
         setSlideKey(prev => prev + 1);
+        // Remove o parâmetro lesson da URL
+        window.history.pushState({}, '', window.location.pathname);
       }
     };
 
@@ -115,6 +140,10 @@ function App() {
     setCurrentSlide(0);
     setSlideKey(prev => prev + 1);
     setScreen('presentation');
+
+    // Atualiza a URL sem recarregar a página
+    const newUrl = `${window.location.pathname}?lesson=${lessonId}`;
+    window.history.pushState({}, '', newUrl);
   };
 
   // Tela de boas-vindas
@@ -188,6 +217,8 @@ function App() {
               setScreen('selector');
               setCurrentSlide(0);
               setSlideKey(prev => prev + 1);
+              // Remove o parâmetro lesson da URL
+              window.history.pushState({}, '', window.location.pathname);
             }}
             style={{
               backgroundColor: '#76c442',
