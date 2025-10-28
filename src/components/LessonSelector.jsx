@@ -28,8 +28,8 @@ function LessonSelector({ lessons, onSelectLesson }) {
       >
         <h1
           style={{
-            fontSize: '3rem',
-            marginBottom: '20px',
+            fontSize: '2rem',
+            marginBottom: '15px',
             textAlign: 'center',
             fontWeight: 'bold',
           }}
@@ -39,8 +39,8 @@ function LessonSelector({ lessons, onSelectLesson }) {
 
         <p
           style={{
-            fontSize: '1.3rem',
-            marginBottom: '50px',
+            fontSize: '1rem',
+            marginBottom: '30px',
             textAlign: 'center',
             opacity: 0.9,
           }}

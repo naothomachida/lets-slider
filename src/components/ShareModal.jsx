@@ -1,8 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function ShareModal({ lessonId, onClose }) {
   const [copied, setCopied] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
   const shareUrl = `${window.location.origin}?lesson=${lessonId}`;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 600);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleCopy = async () => {
     try {
@@ -46,19 +56,48 @@ function ShareModal({ lessonId, onClose }) {
           width: '100%',
           boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
           border: '2px solid rgba(118, 196, 66, 0.3)',
+          position: 'relative',
         }}
       >
+        {/* Botão X no canto superior direito */}
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            background: 'none',
+            border: 'none',
+            color: '#ffffff',
+            fontSize: '2rem',
+            cursor: 'pointer',
+            padding: '0',
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            transition: 'background 0.3s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+          }}
+        >
+          ×
+        </button>
+
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '30px',
+            marginBottom: '25px',
           }}
         >
           <h2
             style={{
-              fontSize: '2rem',
+              fontSize: '1.5rem',
               fontWeight: 'bold',
               color: '#ffffff',
               margin: 0,
@@ -66,32 +105,6 @@ function ShareModal({ lessonId, onClose }) {
           >
             Compartilhar Aula
           </h2>
-          <button
-            onClick={onClose}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#ffffff',
-              fontSize: '2rem',
-              cursor: 'pointer',
-              padding: '0',
-              width: '40px',
-              height: '40px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              transition: 'background 0.3s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
-          >
-            ×
-          </button>
         </div>
 
         <p
@@ -107,8 +120,9 @@ function ShareModal({ lessonId, onClose }) {
         <div
           style={{
             display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
             gap: '15px',
-            alignItems: 'center',
+            alignItems: 'stretch',
             marginBottom: '20px',
           }}
         >
@@ -125,6 +139,8 @@ function ShareModal({ lessonId, onClose }) {
               borderRadius: '10px',
               color: '#ffffff',
               outline: 'none',
+              width: isMobile ? '100%' : 'auto',
+              boxSizing: 'border-box',
             }}
             onClick={(e) => e.target.select()}
           />
@@ -141,6 +157,8 @@ function ShareModal({ lessonId, onClose }) {
               cursor: 'pointer',
               transition: 'all 0.3s',
               whiteSpace: 'nowrap',
+              width: isMobile ? '100%' : 'auto',
+              boxSizing: 'border-box',
             }}
             onMouseEnter={(e) => {
               if (!copied) {
