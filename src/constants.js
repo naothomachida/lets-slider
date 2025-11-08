@@ -44,6 +44,20 @@ export const LESSONS_CATALOG = [
       teachers: 'Naotho & Suelen',
     },
   },
+  {
+    id: 'interligados-licao5-4tri2025',
+    category: 'Interligados',
+    title: 'Lição 5',
+    subtitle: 'Face a Face',
+    quarter: '4º Trimestre 2025',
+    slideCount: 12,
+    titleSlideData: {
+      lessonNumber: 'Lição 5',
+      mainTitle: 'FACE A FACE',
+      subtitle: 'Unidade 2 - Evangelho de João (Cap. 1-3)',
+      teachers: 'Renan & Naotho',
+    },
+  },
 ];
 
 // Dados do slide de título (primeiro slide) - mantido para compatibilidade
@@ -145,6 +159,100 @@ export const LESSONS_SLIDES = {
     title: 'Obrigado!',
     subtitle: 'Que Deus nos abençoe',
   },
+  ],
+  'interligados-licao5-4tri2025': [
+    {
+      type: 'title',
+      content: '',
+    },
+    {
+      type: 'content',
+      title: 'O VERBO SE FEZ CARNE',
+      subtitle: 'João 1:1-18',
+      bulletPoints: [
+        'No princípio era o Verbo, e o Verbo estava com Deus',
+        'E o Verbo era Deus',
+        'E o Verbo se fez carne e habitou entre nós',
+      ],
+    },
+    {
+      type: 'content',
+      title: 'Encontros que Transformam',
+      subtitle: 'Face a Face com Jesus',
+      bulletPoints: [
+        'João Batista aponta para o Cordeiro de Deus (João 1:29)',
+        'Os primeiros discípulos: André, Pedro, Filipe e Natanael',
+        'Jesus vê além das aparências - "Você me verá coisas maiores"',
+      ],
+    },
+    {
+      type: 'content',
+      quote: 'Eis o Cordeiro de Deus, que tira o pecado do mundo!',
+      quoteSource: 'João 1:29',
+    },
+    {
+      type: 'content',
+      title: 'As Bodas de Caná',
+      subtitle: 'João 2:1-11 - O Primeiro Sinal',
+      bulletPoints: [
+        'Jesus transforma água em vinho',
+        'Manifestou a sua glória',
+        'Os discípulos creram nEle',
+      ],
+    },
+    {
+      type: 'content',
+      title: 'A Purificação do Templo',
+      subtitle: 'João 2:13-25',
+      bulletPoints: [
+        'Jesus expulsa os vendedores do templo',
+        '"Não façam da casa de meu Pai casa de negócio"',
+        'Zelo pela casa de Deus',
+      ],
+    },
+    {
+      type: 'content',
+      title: 'Nicodemos - Um Encontro Noturno',
+      subtitle: 'João 3:1-21',
+      bulletPoints: [
+        'Fariseu e membro do Sinédrio',
+        'Veio à noite para conversar com Jesus',
+        'Buscava respostas sinceras',
+      ],
+    },
+    {
+      type: 'content',
+      title: 'Nascer de Novo',
+      quote: 'Em verdade, em verdade te digo que aquele que não nascer de novo não pode ver o Reino de Deus',
+      quoteSource: 'João 3:3',
+    },
+    {
+      type: 'content',
+      title: 'O Amor de Deus',
+      quote: 'Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna',
+      quoteSource: 'João 3:16',
+    },
+    {
+      type: 'timer',
+      title: 'Reflexão em Grupo',
+      duration: 300,
+    },
+    {
+      type: 'content',
+      title: 'Aplicação para Hoje',
+      subtitle: 'Face a Face com Cristo',
+      bulletPoints: [
+        'Jesus nos convida a um encontro pessoal',
+        'Precisamos nascer de novo pelo Espírito',
+        'O amor de Deus é demonstrado na cruz',
+        'Somos chamados a crer e viver esta fé',
+      ],
+    },
+    {
+      type: 'content',
+      title: 'Que Deus nos abençoe!',
+      subtitle: 'Próxima aula: continuaremos em João',
+    },
   ],
 };
 
