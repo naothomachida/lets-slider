@@ -41,7 +41,7 @@ export const LESSONS_CATALOG = [
       lessonNumber: 'Lição 3',
       mainTitle: 'IMPACTE POSITIVAMENTE',
       subtitle: 'Unidade 1 - Profetas menores',
-      teachers: 'Naotho & Suelen',
+      teachers: 'Prof. Renan e Prof. Naotho',
     },
   },
   {
